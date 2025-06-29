@@ -12,6 +12,10 @@ struct Args {
     /// Filter by author name
     #[arg(long)]
     author: Option<String>,
+
+    /// Draw using circles
+    #[arg(short, long, action = clap::ArgAction::SetTrue, default_value_t = false)]
+    circles: bool,
 }
 
 fn main() -> Result<()> {
@@ -35,9 +39,9 @@ fn main() -> Result<()> {
         })
         .map(|(author, dt)| (author, dt.into()));
 
-    let timestamps = if let Some(filter) = args.author {
+    let timestamps = if let Some(filter) = args.author.as_ref() {
         log.filter_map(|(author, dt)| {
-            if author.to_lowercase().contains(&filter) {
+            if author.to_lowercase().contains(filter) {
                 Some(dt)
             } else {
                 None
@@ -48,7 +52,9 @@ fn main() -> Result<()> {
         log.map(|(_, dt)| dt).collect()
     };
 
-    let punchcard = Punchcard::new(timestamps);
+    let mut punchcard = Punchcard::new(timestamps);
+    punchcard.draw_circles(args.circles);
+
     println!("{punchcard}");
 
     Ok(())
