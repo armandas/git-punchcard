@@ -1,0 +1,10 @@
+[package]
+name = "git-punchcard"
+version = "0.1.0"
+authors = ["Armandas Jarušauskas"]
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+chrono = "0.4.41"
+colored = "3.0.0"
